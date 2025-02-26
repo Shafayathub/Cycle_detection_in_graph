@@ -6,27 +6,19 @@ bool vis[105];
 int parent[105];
 bool cycle;
 
-void bfs(int src)
+void dfs(int src)
 {
-    queue<int> q;
-    q.push(src);
     vis[src] = true;
-    while (!q.empty())
+    for (int child : adj_list[src])
     {
-        int par = q.front();
-        q.pop();
-        for (int child : adj_list[par])
+        if (vis[child] && parent[src] != child)
         {
-            if (vis[child] && parent[par] != child)
-            {
-                cycle = true;
-            }
-            if (!vis[child])
-            {
-                q.push(child);
-                vis[child] = true;
-                parent[child] = par;
-            }
+            cycle = true;
+        }
+        if (!vis[child])
+        {
+            parent[child] = src;
+            dfs(child);
         }
     }
 }
@@ -51,7 +43,7 @@ int main()
     {
         if (!vis[i])
         {
-            bfs(i);
+            dfs(i);
         }
     }
     if (cycle)
