@@ -209,6 +209,69 @@ int main()
 }
 ```
 
+### Cycle Detection in a Directed Graph using BFS (Kahn’s Algorithm)
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+vector<int> adj_list[105];
+int in_degree[105];
+
+bool detect_cycle(int n)
+{
+    queue<int> q;
+    int count = 0;
+
+    for (int i = 0; i < n; i++)
+    {
+        if (in_degree[i] == 0)
+        {
+            q.push(i);
+        }
+    }
+
+    while (!q.empty())
+    {
+        int node = q.front();
+        q.pop();
+        count++;
+        for (int child : adj_list[node])
+        {
+            if (--in_degree[child] == 0)
+            {
+                q.push(child);
+            }
+        }
+    }
+    return count != n;
+}
+
+int main()
+{
+    int n, e;
+    cin >> n >> e;
+
+    memset(in_degree, 0, sizeof(in_degree));
+    for (int i = 0; i < e; i++)
+    {
+        int a, b;
+        cin >> a >> b;
+        adj_list[a].push_back(b);
+        in_degree[b]++;
+    }
+
+    if (detect_cycle(n))
+    {
+        cout << "Cycle Detected\n";
+    }
+    else
+    {
+        cout << "No Cycle\n";
+    }
+    return 0;
+}
+```
+
 ## How to Run
 1. Compile the C++ program using a compiler like `g++`:
    ```sh
